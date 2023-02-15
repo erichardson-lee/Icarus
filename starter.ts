@@ -18,7 +18,7 @@ export async function start<
   M extends
     | AnyModule
     | AnyAssembler,
->(...input: M[]): Promise<ModuleMap<M>> {
+>(input: M[]): Promise<ModuleMap<M>> {
   const moduleMap: Record<string, AnyModule> = {};
 
   const moduleIdSet = new Set<string>();
@@ -28,7 +28,7 @@ export async function start<
     moduleIdSet.add(item.id);
 
     if (item instanceof Module) {
-      moduleMap[item.id] = item.data;
+      moduleMap[item.id] = item;
     } else if (item instanceof ModuleAssembler) {
       assemblersMap.set(item.id, item);
     } else {
@@ -41,12 +41,17 @@ export async function start<
   const startOrder: string[] = sort(moduleIdSet, assemblersMap.values());
 
   for (const id of startOrder) {
+    console.log("Starting Module:", id);
     const assembler = assemblersMap.get(id);
-    if (!assembler) continue;
+    if (!assembler) {
+      console.log("Static Module, skipping");
+      continue;
+    }
 
-    const deps: DepMap<AnyModule> = assembler.dependencies.map((id) =>
-      moduleMap[id]
+    const deps: DepMap<AnyModule> = Object.fromEntries(
+      assembler.dependencies.map((id) => [id, moduleMap[id]["data"]]),
     );
+    console.log("deps", deps);
 
     moduleMap[assembler.id] = await assembler.build(deps);
   }
