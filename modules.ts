@@ -1,45 +1,37 @@
 // deno-lint-ignore-file no-explicit-any
 
-export class Module<
-  ID extends string,
-  Data extends any,
-> {
+export class Module<ID extends string = string, Data extends any = any> {
   constructor(public readonly id: ID, public readonly data: Data) {}
 }
 
-export type ModuleMap<
-  M extends Module<string, any> | ModuleAssembler<string, any, any>,
-> = DepMap<M extends ModuleAssembler<string, any, any> ? Assemble<M> : M>;
+export type ModuleMap<M extends Module | ModuleAssembler> = DepMap<
+  M extends ModuleAssembler ? Assemble<M> : M
+>;
 
-export type DepMap<Dependencies extends Module<string, any>> = {
+export type DepMap<Dependencies extends Module = Module> = {
   [dep in Dependencies as dep["id"]]: Awaited<dep["data"]>;
 };
 
 export type ModuleFn<
-  ID extends string,
-  Dependencies extends Module<string, any>,
-  ModData extends any,
+  ID extends string = string,
+  Dependencies extends Module = Module,
+  ModData extends any = any,
 > = (deps: DepMap<Dependencies>) => Promise<Module<ID, ModData>>;
 
 export class ModuleBuilder<
-  ID extends string,
-  Dependencies extends Module<string, any>,
+  ID extends string = string,
+  Dependencies extends Module = Module,
 > {
   public readonly dependencies: Dependencies["id"][] = [];
 
-  constructor(
-    public readonly id: ID,
-  ) {}
+  constructor(public readonly id: ID) {}
 
-  addDependency<
-    M extends Module<string, any> | ModuleAssembler<string, any, any>,
-  >(module: M): ModuleBuilder<
+  addDependency<M extends Module | ModuleAssembler>(module: M): ModuleBuilder<
     ID,
-    | Dependencies
-    | (M extends ModuleAssembler<string, any, any> ? Assemble<M> : M)
+    Dependencies | Assemble<M>
   > {
     this.dependencies.push(module.id);
-    return this;
+    return this as ModuleBuilder<ID, Dependencies | Assemble<M>>;
   }
 
   build<Data>(
@@ -54,14 +46,14 @@ export class ModuleBuilder<
 }
 
 /** Utility function to get the assembled module from a module assembler */
-export type Assemble<A extends ModuleAssembler<any, any, any>> = Awaited<
-  ReturnType<A["build"]>
->;
+export type Assemble<A extends Module | ModuleAssembler> = A extends Module ? A
+  : A extends ModuleAssembler ? Awaited<ReturnType<A["build"]>>
+  : never;
 
 export class ModuleAssembler<
-  ID extends string,
-  Dependencies extends Module<string, any>,
-  Builder extends ModuleFn<string, Module<string, any>, any>,
+  ID extends string = string,
+  Dependencies extends Module = Module,
+  Builder extends ModuleFn = ModuleFn,
 > {
   constructor(
     public readonly id: ID,

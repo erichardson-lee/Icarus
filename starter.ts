@@ -1,28 +1,13 @@
-// deno-lint-ignore-file no-explicit-any
-import {
-  DepMap,
-  Module,
-  ModuleAssembler,
-  ModuleFn,
-  ModuleMap,
-} from "./modules.ts";
+import { DepMap, Module, ModuleAssembler, ModuleMap } from "./modules.ts";
 import { sort } from "./sort.ts";
-type AnyModule = Module<string, any>;
-type AnyAssembler = ModuleAssembler<
-  string,
-  AnyModule,
-  ModuleFn<string, AnyModule, any>
->;
 
 export async function start<
-  M extends
-    | AnyModule
-    | AnyAssembler,
+  M extends Module | ModuleAssembler,
 >(input: M[]): Promise<ModuleMap<M>> {
-  const moduleMap: Record<string, AnyModule> = {};
+  const moduleMap: Record<string, Module> = {};
 
   const moduleIdSet = new Set<string>();
-  const assemblersMap = new Map<string, AnyAssembler>();
+  const assemblersMap = new Map<string, ModuleAssembler>();
 
   for (const item of input) {
     moduleIdSet.add(item.id);
@@ -48,7 +33,7 @@ export async function start<
       continue;
     }
 
-    const deps: DepMap<AnyModule> = Object.fromEntries(
+    const deps: DepMap = Object.fromEntries(
       assembler.dependencies.map((id) => [id, moduleMap[id]["data"]]),
     );
     console.log("deps", deps);

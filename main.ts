@@ -19,3 +19,5 @@ const mods = await start([
   mod2,
   mod3,
 ]);
+
+console.log(mods);
