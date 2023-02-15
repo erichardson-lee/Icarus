@@ -4,8 +4,8 @@
 graph BT
 petData[petData]
 fastify{{fastify}}
-petroutes[petroutes]
+petRoutes[petRoutes]
 
-petroutes -->|Depends On| fastify & petData
+petRoutes -->|Depends On| fastify & petData
 
 ```
