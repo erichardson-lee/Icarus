@@ -23,8 +23,8 @@
  * ```
  */
 export function sort(
-  idSet: Set<string>,
-  data: IterableIterator<{ id: string; dependencies: string[] }>,
+  idSet: Pick<Set<string>, "has">,
+  data: IterableIterator<{ id: string; dependencies?: string[] }>,
 ): string[] {
   type Node = { id: string; afters: string[]; mark?: "temp" | "perm" };
   const unmarkedNodes = new Set<string>();
@@ -40,6 +40,9 @@ export function sort(
 
   for (const value of data) {
     setupNodeIfNotExists(value.id);
+
+    if (!value.dependencies) continue;
+
     for (const dep of value.dependencies) {
       if (!idSet.has(dep)) {
         throw new Error(`Dependency not found '${dep} for layer '${value.id}'`);

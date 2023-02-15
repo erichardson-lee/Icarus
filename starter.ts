@@ -1,9 +1,9 @@
 import { DepMap, Module, ModuleAssembler, ModuleMap } from "./modules.ts";
 import { sort } from "./sort.ts";
 
-export async function start<
-  M extends Module | ModuleAssembler,
->(input: M[]): Promise<ModuleMap<M>> {
+export async function start<M extends Module | ModuleAssembler>(
+  input: M[],
+): Promise<ModuleMap<M>> {
   const moduleMap: Record<string, Module["data"]> = {};
 
   const moduleIdSet = new Set<string>();
