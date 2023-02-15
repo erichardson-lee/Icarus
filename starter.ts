@@ -4,7 +4,7 @@ import { sort } from "./sort.ts";
 export async function start<
   M extends Module | ModuleAssembler,
 >(input: M[]): Promise<ModuleMap<M>> {
-  const moduleMap: Record<string, Module> = {};
+  const moduleMap: Record<string, Module["data"]> = {};
 
   const moduleIdSet = new Set<string>();
   const assemblersMap = new Map<string, ModuleAssembler>();
@@ -13,7 +13,7 @@ export async function start<
     moduleIdSet.add(item.id);
 
     if (item instanceof Module) {
-      moduleMap[item.id] = item;
+      moduleMap[item.id] = item.data;
     } else if (item instanceof ModuleAssembler) {
       assemblersMap.set(item.id, item);
     } else {
@@ -34,11 +34,10 @@ export async function start<
     }
 
     const deps: DepMap = Object.fromEntries(
-      assembler.dependencies.map((id) => [id, moduleMap[id]["data"]]),
+      assembler.dependencies.map((id) => [id, moduleMap[id]]),
     );
-    console.log("deps", deps);
 
-    moduleMap[assembler.id] = await assembler.build(deps);
+    moduleMap[assembler.id] = (await assembler.build(deps)).data;
   }
 
   return moduleMap as ModuleMap<M>;
