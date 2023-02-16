@@ -1,4 +1,4 @@
-import { start } from "../starter.ts";
+import { start } from "../mod.ts";
 import type { Pet } from "./modules/petData.ts";
 import { modules } from "./modules/index.ts";
 

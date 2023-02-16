@@ -1,6 +1,5 @@
 import { Command } from "https://deno.land/x/cliffy@v0.25.7/command/mod.ts";
-import { diagram } from "./diagrammer.ts";
-import { Module, ModuleAssembler } from "./modules.ts";
+import { diagram, Module, ModuleAssembler } from "./mod.ts";
 
 if (!import.meta.main) {
   console.error("Do not import this file, it must be ran directly");
