@@ -1,3 +1,8 @@
+export type Node = {
+  id: string;
+  dependencies?: string[];
+};
+
 /**
  * based on the following psuedocode from wikipedia
  * ```
@@ -24,7 +29,7 @@
  */
 export function sort(
   idSet: Pick<Set<string>, "has">,
-  data: IterableIterator<{ id: string; dependencies?: string[] }>,
+  data: IterableIterator<Node>,
 ): string[] {
   type Node = { id: string; afters: string[]; mark?: "temp" | "perm" };
   const unmarkedNodes = new Set<string>();
