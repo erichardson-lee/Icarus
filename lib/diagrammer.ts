@@ -16,8 +16,7 @@ export function diagram<M extends Module | ModuleAssembler>(
 
   const startOrder: string[] = sort(moduleMap, input.values());
 
-  const declarationLines: string[] = [];
-  const linkLines: string[] = [];
+  const lines: string[] = [];
 
   for (const moduleId of startOrder) {
     const module = moduleMap.get(moduleId);
@@ -26,26 +25,22 @@ export function diagram<M extends Module | ModuleAssembler>(
     const mid = sanitizeId(moduleId);
 
     if (module instanceof Module) {
-      declarationLines.push(`${mid}{{${module.id}}}`);
+      lines.push(`${mid}{{${module.id}}}`);
     } else if (module instanceof ModuleAssembler) {
-      declarationLines.push(`${mid}[${mid}]`);
-
-      if (module.dependencies.length >= 1) {
-        linkLines.push(
-          `${mid} -->|Depends On| ${
+      if (module.dependencies.length < 1) {
+        lines.push(`${mid}[${module.id}]`);
+      } else {
+        lines.push(
+          `${mid}[${module.id}] -->|Depends On| ${
             module.dependencies.map(sanitizeId).join(" & ")
           }`,
         );
-
-        linkLines.push("");
       }
     }
   }
 
   return [
     "graph BT",
-    declarationLines.join("\n"),
-    "",
-    linkLines.join("\n"),
+    lines.join("\n"),
   ].join("\n");
 }
