@@ -2,7 +2,7 @@ import { ModuleBuilder } from "../../modules.ts";
 import { fastifyModule } from "./fastifyModule.ts";
 import { Pet, petDataModule } from "./petData.ts";
 
-export const petRoutesModule = new ModuleBuilder("pet-routes")
+export const petRoutesModule = new ModuleBuilder("petRoutes")
   .addDependency(fastifyModule)
   .addDependency(petDataModule)
   .build(({ fastify, petData }) => {
