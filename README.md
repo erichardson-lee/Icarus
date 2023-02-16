@@ -1,4 +1,6 @@
-# Module System
+# Icarus
+
+A Module system for deno to allow you to fly closer to the sun.
 
 ## What is this repo?
 
