@@ -1,5 +1,4 @@
 import { Command } from "https://deno.land/x/cliffy@v0.25.7/command/mod.ts";
-import { join } from "https://deno.land/std@0.171.0/path/mod.ts";
 import { diagram } from "./diagrammer.ts";
 import { Module, ModuleAssembler } from "./modules.ts";
 
