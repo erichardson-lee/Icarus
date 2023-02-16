@@ -9,5 +9,6 @@ Deno.writeTextFileSync(
     "```mermaid",
     diagram(modules),
     "```",
+    "",
   ].join("\n"),
 );
