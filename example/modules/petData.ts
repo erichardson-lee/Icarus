@@ -1,5 +1,5 @@
 // deno-lint-ignore-file require-await
-import { ModuleBuilder } from "../modules.ts";
+import { ModuleBuilder } from "../../mod.ts";
 
 export type Pet = {
   id: string;

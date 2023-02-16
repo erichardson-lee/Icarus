@@ -1,5 +1,5 @@
 import fastify from "npm:fastify";
-import { Module } from "../mod.ts";
+import { Module } from "../../mod.ts";
 
 const f = fastify({});
 

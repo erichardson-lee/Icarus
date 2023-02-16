@@ -1,17 +1,8 @@
 import { start } from "../starter.ts";
-import { fastifyModule } from "./fastifyModule.ts";
-import type { Pet } from "./petData.ts";
-import { petRoutesModule } from "./petRoutes.ts";
+import type { Pet } from "./modules/petData.ts";
+import { modules } from "./modules/index.ts";
 
-const data = await start([
-  fastifyModule,
-
-  // Added before dependency in the list (it doesn't matter)
-  petRoutesModule,
-
-  // Dynamic import example
-  (await import("./petData.ts")).petDataModule,
-]);
+const data = await start(modules);
 console.log("Done Loading Modules");
 
 // Example of using module return values after starting

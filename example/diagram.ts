@@ -1,7 +1,5 @@
 import { diagram } from "../mod.ts";
-import { fastifyModule } from "./fastifyModule.ts";
-import { petRoutesModule } from "./petRoutes.ts";
-import { petDataModule } from "./petData.ts";
+import { modules } from "./modules/index.ts";
 
 Deno.writeTextFileSync(
   "./README.md",
@@ -9,11 +7,7 @@ Deno.writeTextFileSync(
     "# Example Project",
     "",
     "```mermaid",
-    diagram([
-      fastifyModule,
-      petRoutesModule,
-      petDataModule,
-    ]),
+    diagram(modules),
     "```",
   ].join("\n"),
 );

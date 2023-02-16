@@ -1,4 +1,4 @@
-import { ModuleBuilder } from "../modules.ts";
+import { ModuleBuilder } from "../../modules.ts";
 import { fastifyModule } from "./fastifyModule.ts";
 import { Pet, petDataModule } from "./petData.ts";
 
